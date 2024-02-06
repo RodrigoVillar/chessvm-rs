@@ -14,3 +14,8 @@ cargo build \
 ```bash
 ./target/release/chessvm-cli
 ```
+
+## Acknowledgements
+
+This project is inspired by and forks the
+[TimestampVM](https://github.com/ava-labs/timestampvm-rs) project by Ava Labs.
