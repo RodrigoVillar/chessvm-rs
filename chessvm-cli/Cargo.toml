@@ -1,0 +1,18 @@
+[package]
+name = "chessvm-cli"
+version = "0.1.0"
+edition = "2021"
+description = "CLI for interacting with an existing ChessVM instance"
+
+# See more keys and their definitions at
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "chessvm-cli"
+path = "src/bin/chessvm-cli/main.rs"
+
+[dependencies]
+clap = { version = "4.4.18", features = ["cargo"] }
+chessvm = { path = "../chessvm" }
+tokio = { version = "1.35.0" }
+alloy-primitives = { versiom = "0.5.4" }
