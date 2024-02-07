@@ -131,6 +131,9 @@ Getting the updated game state:
 Current game board is the following: rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR
 ```
 
+At any point, using the `--help` flag in the CLI will give more details about
+what a command does.
+
 ### Common Errors
 
 Below is a list of common errors that you may run into while working with
