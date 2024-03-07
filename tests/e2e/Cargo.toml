@@ -17,4 +17,4 @@ chessvm = { path = "../../chessvm" }
 tokio = { version = "1.35.0", features = [] }
 serde_json = "1.0.108"
 random-manager = "0.0.5"
-alloy-primitives = { versiom = "0.5.4", features = ["serde"]}
+alloy-primitives = { version = "0.5.4", features = ["serde"]}

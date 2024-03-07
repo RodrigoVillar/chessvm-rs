@@ -27,7 +27,7 @@ tokio = { version = "1.35.0", features = ["fs", "rt-multi-thread"] }
 tonic = { version = "0.10.2", features = ["gzip"] }
 typetag = "0.2.15"
 shakmaty = "0.26.0"
-alloy-primitives = { versiom = "0.5.4", features = ["serde"]}
+alloy-primitives = { version = "0.5.4", features = ["serde"]}
 
 
 
