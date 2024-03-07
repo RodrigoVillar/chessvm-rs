@@ -1,0 +1,14 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+	"name": "Chess VM DevContainer",
+
+	"image": "rust:latest",
+	"runArgs": ["--network=host"],
+	
+	"remoteUser": "root",
+
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/target/release/:~/.local/bin"
+	},
+	//"postCreateCommand": "cargo build --release --bin chessvm-cli"
+}
