@@ -10,5 +10,7 @@
 	"remoteEnv": {
 		"PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/target/release/:~/.local/bin"
 	},
+
+	"features": { "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2" : {} }
 	//"postCreateCommand": "cargo build --release --bin chessvm-cli"
 }
