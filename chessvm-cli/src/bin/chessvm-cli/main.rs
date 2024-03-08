@@ -183,23 +183,35 @@ async fn execute_get_game(http_rpc: &str, url_path: &str, sub_args: &ArgMatches)
     println!("Failed to call get_game!");
 }
 
-fn print_chess_board_from_fen(fen: &String) {
-    // Split the FEN string at spaces, and take the first part which represents the board
-    let board_fen = fen.split_whitespace().next().unwrap();
+fn print_chess_board_from_fen(fen: &str) {
+    // Directly use the FEN string as the board layout
+    let board_layout = fen;
 
-    // Iterate over each character in the board representation
-    for c in board_fen.chars() {
+    // Replace digits with spaces (indicating empty squares) and replace '/' with newlines
+    let mut pretty_board = String::new();
+    for c in board_layout.chars() {
         match c {
             '1'..='8' => {
-                // If the character is a digit, replace it with that many spaces
+                // Convert digit to corresponding number of spaces
                 let spaces = c.to_digit(10).unwrap() as usize;
-                print!("{}", " ".repeat(spaces));
+                pretty_board.extend(std::iter::repeat('.').take(spaces));
             }
-            '/' => println!(), // If the character is a slash, move to the next line
-            _ => print!("{}", c), // Otherwise, print the character as-is
+            '/' => pretty_board.push('\n'), // New line for a new rank
+            _ => pretty_board.push(c),      // Chess piece
         }
     }
-    println!(); // Ensure the output ends with a newline
+
+    // Print the pretty board with border
+    println!("  +-----------------+");
+    for (i, rank) in pretty_board.split('\n').enumerate() {
+        print!("{} | ", 8 - i); // Print rank numbers on the left
+        for piece in rank.chars() {
+            print!("{} ", piece); // Print the piece or space with spacing for readability
+        }
+        println!("|");
+    }
+    println!("  +-----------------+");
+    println!("    a b c d e f g h  "); // Print file letters below
 }
 
 async fn execute_make_move(http_rpc: &str, url_path: &str, sub_args: &ArgMatches) {
