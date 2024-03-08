@@ -160,15 +160,38 @@ async fn execute_get_game(http_rpc: &str, url_path: &str, sub_args: &ArgMatches)
         .unwrap();
 
     if let Ok(resp) = client::get_game(http_rpc, url_path, game_id).await {
-        println!(
-            "Current game board is the following: {}",
-            resp.result.unwrap().game
-        );
+        // println!(
+        //     "Current game board is the following: {}",
+        //     resp.result.unwrap().game
+        // );
+        println!("Current game board is the following: ");
+        print_chess_board_from_fen(&resp.result.unwrap().game);
         return;
     }
 
     println!("Failed to call get_game!");
 }
+
+
+fn print_chess_board_from_fen(fen: &String) {
+    // Split the FEN string at spaces, and take the first part which represents the board
+    let board_fen = fen.split_whitespace().next().unwrap();
+
+    // Iterate over each character in the board representation
+    for c in board_fen.chars() {
+        match c {
+            '1'..='8' => {
+                // If the character is a digit, replace it with that many spaces
+                let spaces = c.to_digit(10).unwrap() as usize;
+                print!("{}", " ".repeat(spaces));
+            }
+            '/' => println!(), // If the character is a slash, move to the next line
+            _ => print!("{}", c), // Otherwise, print the character as-is
+        }
+    }
+    println!(); // Ensure the output ends with a newline
+}
+
 async fn execute_make_move(http_rpc: &str, url_path: &str, sub_args: &ArgMatches) {
     async fn execute_en_passant_move(http_rpc: &str, url_path: &str, sub_args: &ArgMatches) {
         // Extract args

@@ -255,6 +255,10 @@ impl State {
             }
         }
 
+        if !curr_game.game.is_legal(mv) {
+            return Ok(());
+        }
+
         // Player can make the move, we update the game state and write back
         if let Ok(v) = curr_game.game.play(mv) {
             // Update game state
@@ -265,7 +269,7 @@ impl State {
             return Ok(());
         }
 
-        Err(Error::new(ErrorKind::Other, "Move is illegal!"))
+        Err(Error::new(ErrorKind::Other, "MakeMove Failed!"))
     }
 
     /// Ends a chess game, if possible
