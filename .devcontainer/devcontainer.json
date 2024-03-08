@@ -8,9 +8,14 @@
 	"remoteUser": "root",
 
 	"remoteEnv": {
-		"PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/target/release/:~/.local/bin"
+		"PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/target/release/:~/.local/bin",
+		"VM_PLUGIN_PATH": "${containerWorkspaceFolder}/target/release/chessvm"
 	},
 
-	"features": { "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2" : {} }
+	"features": { 
+		"ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2" : {},
+		"ghcr.io/devcontainers/features/go:1":{}
+	}
+	
 	//"postCreateCommand": "cargo build --release --bin chessvm-cli"
 }
