@@ -252,7 +252,7 @@ pub async fn make_move(
     let rb = http_manager::post_non_tls(http_rpc, url_path, &d).await?;
 
     serde_json::from_slice(&rb)
-        .map_err(|e| Error::new(ErrorKind::Other, format!("failed create_game '{e}'")))
+        .map_err(|e| Error::new(ErrorKind::Other, format!("failed make_move '{e}'")))
 }
 
 /// Represents the RPC response for API `exists`
