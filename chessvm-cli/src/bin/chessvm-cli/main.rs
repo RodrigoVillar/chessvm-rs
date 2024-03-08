@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{env, str::FromStr};
 
 use alloy_primitives::Address;
 use chessvm::{api::chain_handlers::MoveEnum, client};
@@ -6,6 +6,9 @@ use clap::{command, Arg, ArgMatches, Command};
 
 #[tokio::main]
 async fn main() {
+    let is_http_rpc_set = env::var("HTTP_RPC").is_ok();
+    let is_url_path_set = env::var("URL_PATH").is_ok();
+
     let matches =
         command!()
             .about("A CLI to interact with an existing ChessVM instance")
@@ -86,27 +89,35 @@ async fn main() {
                             )
                     ),
             )
-            .arg(Arg::new("http-rpc").short('h').required(true))
-            .arg(Arg::new("url-path").short('u').required(true))
+            .arg(Arg::new("http-rpc").short('h').required(!is_http_rpc_set))
+            .arg(Arg::new("url-path").short('u').required(!is_url_path_set))
             .get_matches();
 
-    let http_rpc = matches
-        .get_one::<String>("http-rpc")
-        .expect("http-rpc is required!");
-    let url_path = matches
-        .get_one::<String>("url-path")
-        .expect("url-path is required!");
+    let http_rpc: String;
+    let url_path: String;
 
-    // println!("{}, {}", http_rpc, url_path);
+    if let Some(v) = matches.get_one::<String>("http-rpc") {
+        http_rpc = v.clone();
+    } else {
+        http_rpc = env::var("HTTP_RPC").unwrap();
+    }
+
+    if let Some(v) = matches.get_one::<String>("url-path") {
+        url_path = v.clone();
+    } else {
+        url_path = env::var("URL_PATH").unwrap();
+    }
 
     match matches.subcommand() {
-        Some(("ping", _)) => execute_ping(http_rpc, url_path).await,
+        Some(("ping", _)) => execute_ping(&http_rpc, &url_path).await,
         Some(("does-game-exist", sub_args)) => {
-            execute_does_game_exist(http_rpc, url_path, sub_args).await
+            execute_does_game_exist(&http_rpc, &url_path, sub_args).await
         }
-        Some(("create-game", sub_args)) => execute_create_game(http_rpc, url_path, sub_args).await,
-        Some(("get-game", sub_args)) => execute_get_game(http_rpc, url_path, sub_args).await,
-        Some(("make-move", sub_args)) => execute_make_move(http_rpc, url_path, sub_args).await,
+        Some(("create-game", sub_args)) => {
+            execute_create_game(&http_rpc, &url_path, sub_args).await
+        }
+        Some(("get-game", sub_args)) => execute_get_game(&http_rpc, &url_path, sub_args).await,
+        Some(("make-move", sub_args)) => execute_make_move(&http_rpc, &url_path, sub_args).await,
         _ => panic!("Unknown subcommand!"),
     };
 }
@@ -172,7 +183,6 @@ async fn execute_get_game(http_rpc: &str, url_path: &str, sub_args: &ArgMatches)
     println!("Failed to call get_game!");
 }
 
-
 fn print_chess_board_from_fen(fen: &String) {
     // Split the FEN string at spaces, and take the first part which represents the board
     let board_fen = fen.split_whitespace().next().unwrap();
@@ -211,10 +221,7 @@ async fn execute_make_move(http_rpc: &str, url_path: &str, sub_args: &ArgMatches
             .get_one::<String>("from-square")
             .unwrap()
             .to_owned();
-        let to_square = sub_args
-            .get_one::<String>("to-square")
-            .unwrap()
-            .to_owned();
+        let to_square = sub_args.get_one::<String>("to-square").unwrap().to_owned();
 
         // Make call
         if let Ok(resp) = client::make_move(

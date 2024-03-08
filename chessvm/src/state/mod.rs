@@ -247,11 +247,15 @@ impl State {
         // Check if player can make move
         if curr_game.game.turn() == Color::White {
             if player != curr_game.white {
-                return Err(Error::new(ErrorKind::Other, "It is not the player's turn!"));
+                // return Err(Error::new(ErrorKind::Other, "It is not the
+                // player's turn!"));
+                return Ok(()); // Not changing game state maintains invariants
             }
         } else {
             if player != curr_game.black {
-                return Err(Error::new(ErrorKind::Other, "It is not the player's turn!"));
+                // return Err(Error::new(ErrorKind::Other, "It is not the
+                // player's turn!"));
+                return Ok(());
             }
         }
 

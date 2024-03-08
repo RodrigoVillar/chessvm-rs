@@ -75,6 +75,15 @@ Options:
   -V, --version      Print version
 ```
 
+To avoid having to pass in the `http-rpc`, `url-path` arguments every time you
+make a ChessVM-CLI command, simply export the HTTP-RPC, URL-PATH variables you
+were given as environment variables:
+
+```bash
+export HTTP_RPC="http://127.0.0.1:9656"
+export URL_PATH="ext/bc/7kPBUWKQDvAY8jEsGUuz4RaUj8GhrnjWgWhJeakQmMvjzrTUo/rpc"
+```
+
 To test that you are able to succesfully interact with your instance of ChessVM,
 you can ping the server (using the recommended HTTP-RPC/URL-Path variables you
 were given when deploying ChessVM):
@@ -122,6 +131,8 @@ To make a move:
 
 Normal Move Transaction Submission Status: true
 ```
+
+Note: To capture a piece, append the piece that you wish to capture to your make-move command (in FEN notation)
 
 Getting the updated game state:
 
